@@ -114,4 +114,3 @@ inventory-order-management-system/
 ## 👨‍💻 Author
 
 **Sairaj Naikwade**
-*Built following modern enterprise guidelines for robust full-stack applications.*
