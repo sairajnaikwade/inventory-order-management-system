@@ -159,5 +159,4 @@ If running outside Docker containers:
 ---
 
 ## Author
-**Software Engineer & DevOps Architect Assessment**
-*Suite built following rigorous enterprise guidelines for high-performing startup integrations.*
+**Sairaj Naikwade**
