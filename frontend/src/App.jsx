@@ -15,13 +15,27 @@ import {
   X,
   Eye,
   ShoppingCart,
-  Loader2
+  Loader2,
+  Sun,
+  Moon,
+  Menu
 } from "lucide-react";
 import { api } from "./api";
 
 export default function App() {
-  // Navigation
+  // Theme & Navigation
+  const [theme, setTheme] = useState(() => localStorage.getItem("im-theme") || "dark");
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("im-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
 
   // Core Data State
   const [summary, setSummary] = useState(null);
@@ -354,7 +368,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="spinner-container" style={{ minHeight: "100vh", background: "#09090b" }}>
+      <div className="spinner-container" style={{ minHeight: "100vh", background: "var(--bg-app)" }}>
         <div className="spinner"></div>
         <p style={{ color: "var(--text-secondary)", fontWeight: 500 }}>Initializing Inventory Console...</p>
       </div>
@@ -364,9 +378,32 @@ export default function App() {
   return (
     <div className="app-container">
       {/* ==========================================
+          MOBILE TOP HEADER
+          ========================================== */}
+      <header className="mobile-header">
+        <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)}>
+          <Menu size={24} />
+        </button>
+        <div className="mobile-brand">
+          <ShoppingBag size={20} className="mobile-brand-icon" />
+          <span>IM-SYSTEM</span>
+        </div>
+        <button className="theme-toggle-btn" onClick={toggleTheme} aria-label="Toggle Theme">
+          {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+      </header>
+
+      {/* ==========================================
+          MOBILE NAVIGATION OVERLAY
+          ========================================== */}
+      {mobileMenuOpen && (
+        <div className="mobile-nav-overlay" onClick={() => setMobileMenuOpen(false)}></div>
+      )}
+
+      {/* ==========================================
           SIDEBAR NAVIGATION
           ========================================== */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${mobileMenuOpen ? "mobile-open" : "mobile-closed"}`}>
         <div className="brand-section">
           <div className="brand-logo">
             <ShoppingBag size={22} strokeWidth={2.5} />
@@ -377,7 +414,10 @@ export default function App() {
         <nav className="sidebar-nav">
           <div
             className={`nav-item ${activeTab === "dashboard" ? "active" : ""}`}
-            onClick={() => setActiveTab("dashboard")}
+            onClick={() => {
+              setActiveTab("dashboard");
+              setMobileMenuOpen(false);
+            }}
           >
             <LayoutDashboard />
             <span>Dashboard</span>
@@ -385,7 +425,10 @@ export default function App() {
 
           <div
             className={`nav-item ${activeTab === "products" ? "active" : ""}`}
-            onClick={() => setActiveTab("products")}
+            onClick={() => {
+              setActiveTab("products");
+              setMobileMenuOpen(false);
+            }}
           >
             <ShoppingBag />
             <span>Products</span>
@@ -393,7 +436,10 @@ export default function App() {
 
           <div
             className={`nav-item ${activeTab === "customers" ? "active" : ""}`}
-            onClick={() => setActiveTab("customers")}
+            onClick={() => {
+              setActiveTab("customers");
+              setMobileMenuOpen(false);
+            }}
           >
             <Users />
             <span>Customers</span>
@@ -401,7 +447,10 @@ export default function App() {
 
           <div
             className={`nav-item ${activeTab === "orders" ? "active" : ""}`}
-            onClick={() => setActiveTab("orders")}
+            onClick={() => {
+              setActiveTab("orders");
+              setMobileMenuOpen(false);
+            }}
           >
             <Receipt />
             <span>Orders</span>
@@ -409,6 +458,19 @@ export default function App() {
         </nav>
 
         <div className="sidebar-footer">
+          <button className="sidebar-theme-btn" onClick={toggleTheme} type="button">
+            {theme === "dark" ? (
+              <>
+                <Sun size={18} />
+                <span>Light Theme</span>
+              </>
+            ) : (
+              <>
+                <Moon size={18} />
+                <span>Dark Theme</span>
+              </>
+            )}
+          </button>
           <p className="footer-text">v1.0.0 • Connected to DB</p>
         </div>
       </aside>
