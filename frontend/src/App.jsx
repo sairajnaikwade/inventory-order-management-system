@@ -472,6 +472,9 @@ export default function App() {
             )}
           </button>
           <p className="footer-text">v1.0.0 • Connected to DB</p>
+          <p className="footer-text" style={{ marginTop: "0.4rem", fontWeight: "600", color: "var(--primary-light)" }}>
+            Developed by Sairaj Naikwade
+          </p>
         </div>
       </aside>
 
