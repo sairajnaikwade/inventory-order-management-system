@@ -8,8 +8,21 @@ from .routers import products, customers, orders, dashboard
 try:
     Base.metadata.create_all(bind=engine)
     print("Database tables initialized successfully.")
+    
+    # Self-healing: Auto-seed the database with mock records if it has 0 products
+    from .database import SessionLocal
+    from . import models
+    from .seed_data import seed
+    
+    db = SessionLocal()
+    try:
+        if db.query(models.Product).count() == 0:
+            print("Empty database detected. Running automatic seeding of baseline catalog...")
+            seed()
+    finally:
+        db.close()
 except Exception as e:
-    print(f"Error during database initialization: {e}")
+    print(f"Error during database initialization/seeding: {e}")
     # We don't crash here so that in docker compose we allow time for DB service to boot
 
 app = FastAPI(
