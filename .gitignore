@@ -1,0 +1,30 @@
+# Core environment variables
+.env
+
+# Python caching & environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+backend/venv/
+.pytest_cache/
+*.db
+local_inventory.db
+
+# Node packaging & builds
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# OS-specific files
+.DS_Store
+Thumbs.db
